@@ -32,18 +32,6 @@ void quick(int a[], int l , int r){
 
 int main(){
 
-    // int temp =  n % 100000 ;  // 46486
-    // int sad = n - temp  ; //90000
-    // int result = sad / 100000;
-    // n = temp  ; 
-    // cout << temp <<" "<< sad <<" "<< result << endl; 
-
-    // temp =  n % 10000 ;  
-    // sad = n - temp  ; 
-    // result = sad / 10000 ; 
-    // n = temp  ; 
-    // cout << temp <<" "<< sad <<" "<< result; 
-
     int n = 936486 ; 
 
     if( n > 1000000 && n < 1){
@@ -64,7 +52,6 @@ int main(){
     n = temp  ; 
     a[index] = result ; 
     index ++ ; 
-    // cout << result << endl; 
     }
 
     quick(a,0,index-1) ; 

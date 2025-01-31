@@ -1,72 +1,87 @@
-#include<bits/stdc++.h>
+#include <iostream>
 
-using namespace std ;
+using namespace std;
 
-int patition(int a[] , int l , int r){
+int patition(int a[], int l ,int r ){
+    int pivot = a[r] ; 
 
-    int pivot = a[r] ;
+    int i = l-1 ;
 
-    int i = l-1 ; 
-    for(int j =l ; j<=r ; j++){
+    for(int j = l ; j <= r ; j++){
         if(a[j] < pivot){
-            i++  ; 
-            swap(a[i] , a[j]); 
+            i++ ; 
+            swap(a[i] , a[j]) ;
         }
     }
-    swap(a[i+1],a[r]) ; 
+    swap(a[i+1],a[r]) ;
 
-return i+1 ;
+return i+1; 
 
 }
 
 
 
-int QS(int a[] , int l ,int r, int k ){
 
-    if(l == r){// base case 
-        return a[l] ;
+
+int QS(int a[] , int l , int r , int k){
+
+    if(l == r){
+        return a[l] ; 
     }
-    int p = patition(a,l,r) ; 
-    if(k == p){ // base case 
+
+    int p = patition(a,l,r) ;
+
+    if(k==p){
         return a[p] ; 
     }
-    
-    if(k < p){
-        return QS(a,l,p-1,k) ; 
+    if(k > p){
+        return QS(a,p+1,r,k) ; 
     }
     else{
-        return QS(a,p+1,r,k)  ; 
+        return QS(a,l,p-1,k) ; 
     }
 
-
 }
+
+
 
 
 int main()
 {
-    int  n ,m ; 
-     // int a[n] = {1, 5 ,10, 4, 8, 2, 6}; // 1 + 6 + 4
-     cin >> n ;
+
+    int n, m;
+    cin >> n;
     int a[n] = {};
-    for(int i = 0 ; i<n ; i++){
-        cin >> a[i] ;
+
+    for (int i = 0; i < n; i++)
+    {
+        cin >> a[i];
     }
-    
-    cin >> m ;
-    int k[m] = {} ; 
-    for(int j = 0 ; j< m ; j++){
-        int t;
+
+    cin >> m;
+    int k[m] = {};
+    for (int i = 0; i < m; i++)
+    {
+        int t  ;
         cin >> t;
-        k[j] = t-1; 
+        k[i] = t-1 ;
     }
 
-
-    int count = 0 ;
-    for(int i = 0 ; i < m ; i++){
-        count += QS(a,0,n-1,k[i]);
+   int count =  0 ;
+    for(int i = 0 ; i< m ; i++){
+        count  +=  QS(a,0,n-1,k[i]);
+        cout << count << " " ;   
     }
 
-    cout << count ;
+    // for (int i = 0; i < n; i++)
+    // {
+    //     cout << a[i] << " ";
+    // }
+    // cout << endl;
+    // for (int i = 0; i < m; i++)
+    // {
+    //     cout << k[i] << " ";
+    // }
 
     return 0;
 }
