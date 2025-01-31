@@ -2,6 +2,7 @@
 using namespace std;
 
 int partition(int a[], int l, int r, int pivots[], int& pivotCount) {
+    
     int mid = (l + r) / 2;
     if (a[l] > a[mid]) swap(a[l], a[mid]);
     if (a[l] > a[r]) swap(a[l], a[r]);
