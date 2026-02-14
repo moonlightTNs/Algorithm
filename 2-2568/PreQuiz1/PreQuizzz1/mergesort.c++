@@ -1,4 +1,5 @@
 #include<iostream>
+#include<vector>
 
 using namespace std ;
 
@@ -6,7 +7,7 @@ void merge(int a[] , int l ,int m , int r){
     
     int n1 = m-l+1 ;
     int n2 = r-m ;
-    int L[n1] , R[n2] ;
+    vector<int> L(n1) , R(n2) ;
 
     for(int i = 0 ; i < n1 ; i++){
         L[i] = a[l+i] ;
