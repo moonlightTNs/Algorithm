@@ -11,7 +11,7 @@ int binarySearch(long long lo, long long hi, long long x) {
   if (lo > hi)
     return 0; // ไม่เจอ
 
-  long long mid = (lo + hi) / 2;
+  long long mid = lo + (hi-lo) / 2;
   long long sum = mid * (mid + 1) / 2;
 
   if (sum == x)
