@@ -1,0 +1,43 @@
+# Compiled object files
+*.o
+*.obj
+*.out
+
+# Executables
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Debug files
+*.dSYM/
+*.ilk
+*.pdb
+
+# Build directories
+build/
+bin/
+out/
+Debug/
+Release/
+
+# IDE files
+.vscode/
+.idea/
+*.sln
+*.vcxproj
+*.vcxproj.*
+
+# Temporary files
+*.tmp
+*.temp
+*~
+
+# OS generated files
+.DS_Store
+Thumbs.db
+desktop.ini
