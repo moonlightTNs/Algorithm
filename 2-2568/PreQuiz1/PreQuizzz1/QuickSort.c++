@@ -23,9 +23,11 @@ int pati(int a[] , int l , int r){
     return i ; 
 }
 
+int recursiveCalls = 0; // เพิ่มตัวแปร global
 void quicksort(int a[] , int l, int r, int &count){
     if(l < r){
         count++ ;
+        recursiveCalls++;
         int p = pati(a,l,r) ; 
         quicksort(a,l,p-1,count) ; 
         quicksort(a,p+1,r,count) ;
@@ -34,17 +36,16 @@ void quicksort(int a[] , int l, int r, int &count){
 
 
 int main(){
-    
     int a[100]={32,100,24,999,66,33,10,20} ; 
     int n = 8 ;
     int count = 0;
     quicksort(a,0,n-1,count) ;
-    
     for(int i=0 ; i<n ; i++){
         cout << a[i] << " "  ;
     }
     cout << endl ;
-    cout << "Recursive count: " << count ;
+    cout << "Recursive count (parameter): " << count << endl;
+    cout << "Recursive calls (global): " << recursiveCalls << endl;
     return 0 ; 
 }
 
