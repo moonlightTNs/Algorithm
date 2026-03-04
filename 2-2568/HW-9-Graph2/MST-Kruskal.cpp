@@ -25,7 +25,7 @@ void union_set(int x, int y) {
 bool is_cycle(int u, int v) {
     int x = find_set(u);
     int y = find_set(v);
-    return (x == y);
+    return (x == y) ? true:false ;
 }
 
 int main() {
