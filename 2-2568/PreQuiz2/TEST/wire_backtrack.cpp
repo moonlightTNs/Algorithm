@@ -3,9 +3,8 @@
 
 using namespace std;
 
-int target = 8;
-int minCuts = 1e9 ;
-vector<int> wire = {2, 3, 5};
+int target;
+int minCuts = 1e9;
 
 void binaryBack(const vector<int> &x, int idx, int l, int sum)
 {
@@ -32,6 +31,15 @@ void binaryBack(const vector<int> &x, int idx, int l, int sum)
 
 int main()
 {
+    int n;
+    cin >> n >> target;
+
+    vector<int> wire(n);
+    for (int i = 0; i < n; i++)
+    {
+        cin >> wire[i];
+    }
+
     binaryBack(wire, 0, 0, 0);
 
     if (minCuts == 1e9)
