@@ -8,23 +8,23 @@ using namespace std;
 vector<int> parentSet;
 
 // find: หาหัวกลุ่ม (root) ของ node
-int find_set(int i) {
+int find_root(int i) {
     if (parentSet[i] == i)
         return i;
-    return find_set(parentSet[i]);
+    return find_root(parentSet[i]);
 }
 
 // union_set: รวมกลุ่มของ x และ y เข้าด้วยกัน
 void union_set(int x, int y) {
-    int xroot = find_set(x);
-    int yroot = find_set(y);
+    int xroot = find_root(x);
+    int yroot = find_root(y);
     parentSet[xroot] = yroot;
 }
 
 // is_cycle: เช็กว่าเพิ่ม edge (u, v) แล้วจะเกิด cycle ไหม
 bool is_cycle(int u, int v) {
-    int x = find_set(u);
-    int y = find_set(v);
+    int x = find_root(u);
+    int y = find_root(v);
     return (x == y) ? true:false ;
 }
 
