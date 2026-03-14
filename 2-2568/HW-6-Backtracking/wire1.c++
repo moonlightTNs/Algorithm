@@ -6,46 +6,45 @@ int n;              // จำนวนสายไฟ
 int target;         // ความยาวที่ต้องการ
 int minCuts;        // จำนวนสายไฟที่ถูกตัดน้อยที่สุด
 
-void print_subset(int x[], int l) {
-    cout << "Subset: ";
-    for (int i = 1; i <= l; i++)
-        cout << wire[x[i]] << " ";
-    cout << endl;
-}
+// void print_subset(int x[], int l) {
+//     cout << "Subset: ";
+//     for (int i = 1; i <= l; i++)
+//         cout << wire[x[i]] << " ";
+//     cout << endl;
+// }
 
-void subset_index(int x[], int l, int sum) {
-    // ตรวจสอบว่าผลรวมเท่ากับ target หรือไม่
-    if (sum == target) {
-        if (l < minCuts) {
-            minCuts = l;
-            //print_subset(x, l);  
+void subset_index(int selectedIndex[], int chosenCount, int currentSum) {
+    // Base case: ถ้าผลรวมได้พอดี target ให้พยายามอัปเดตคำตอบที่ดีที่สุด
+    if (currentSum == target) {
+        if (chosenCount < minCuts) {
+            minCuts = chosenCount;
+            //print_subset(selectedIndex, chosenCount);
         }
         return;
     }
-    
-    // ถ้าผลรวมเกิน target ก็ไม่ต้องค้นหาต่อ
-    if (sum > target) return;
-    
-    int j;
-    if (l == 0)
-        j = 1;           // start from the 1st element
-    else
-        j = x[l] + 1;    // continue to next element
 
-    for (int i = j; i <= n; i++) {
-        x[l + 1] = i;                       // extend subsets
-        subset_index(x, l + 1, sum + wire[i]);   // recursive with new sum
+    // Pruning: ถ้าผลรวมเกินแล้ว หรือใช้จำนวนเส้นไม่น้อยกว่า best เดิม ก็หยุดกิ่งนี้
+    if (currentSum > target || chosenCount >= minCuts)
+        return;
+
+    int startIndex;
+    if (chosenCount == 0)
+        startIndex = 1;                    // เริ่มจากเส้นแรก
+    else
+        startIndex = selectedIndex[chosenCount] + 1; // ต่อจากเส้นล่าสุดที่เลือก
+
+    // เลือกเส้นถัดไปโดยบังคับ index เพิ่มขึ้น -> ไม่ซ้ำเส้นเดิม/ไม่ซ้ำลำดับ
+    for (int i = startIndex; i <= n; i++) {
+        selectedIndex[chosenCount + 1] = i;
+        subset_index(selectedIndex, chosenCount + 1, currentSum + wire[i]);
     }
 }
 
 int main() {
-    cout << "Enter target length: ";
+
     cin >> target;
-    
-    cout << "Enter number of wires: ";
     cin >> n;
-    
-    cout << "Enter wire lengths: ";
+
     for (int i = 1; i <= n; i++) {
         cin >> wire[i];
     }
