@@ -34,9 +34,7 @@ vector<int> dijktra(vector<vector<pair<int,int>>> &list , int V , int src){
         pq.pop() ;
 
         // ข้ามข้อมูลเก่าจาก heap หรือโหนดที่ถูกยืนยันแล้ว
-        if(Intree[currentV])
-            continue ;
-        if(currentD > dist[currentV])
+        if(Intree[currentV] || currentD > dist[currentV])
             continue ;
 
         // ยืนยัน currentV: ระยะทางสั้นที่สุดของโหนดนี้ถูกตรึงแล้ว
