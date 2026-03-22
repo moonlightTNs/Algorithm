@@ -7,23 +7,24 @@ using namespace std;
 // ฟังก์ชัน BFS แบบจำกัดความลึก m
 int BFS(const vector<vector<int>>& graph, int V, int start, int m) {
     
-    vector<int> dist(V + 1, -1);
+    vector<int> level(V + 1, -1);
     queue<int> q;
 
-    dist[start] = 0;
+    level[start] = 0;
     q.push(start);
 
     while (!q.empty()) {
-        int current = q.front();
+        int currentV = q.front();
         q.pop();
 
         // ถ้าถึงระดับ m แล้ว ไม่ต้องขยายต่อ
-        if (dist[current] == m)
+        if (level[currentV] == m)
             continue;
 
-        for (int neighbor : graph[current]) {
-            if (dist[neighbor] == -1) {
-                dist[neighbor] = dist[current] + 1;
+        for (int i = 0; i < graph[currentV].size(); i++) {
+            int neighbor = graph[currentV][i];
+            if (level[neighbor] == -1) {
+                level[neighbor] = level[currentV] + 1;
                 q.push(neighbor);
             }
         }
@@ -32,7 +33,7 @@ int BFS(const vector<vector<int>>& graph, int V, int start, int m) {
     // นับ vertex ที่ไม่ครอบคลุม
     int countUncovered = 0;
     for (int i = 1; i <= V; i++) {
-        if (dist[i] == -1 || dist[i] > m) {
+        if (level[i] == -1 || level[i] > m) {
             countUncovered++;
         }
     }
