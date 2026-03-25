@@ -1,41 +1,10 @@
 #include <iostream>
+#include <algorithm> 
+
 using namespace std;
 
-int partition(double arr[], int low, int high) {
-  double pivot = arr[high];
-  int i = low;
-  for (int j = low; j < high; j++) {
-    if (arr[j] <= pivot) {
-      swap(arr[i], arr[j]);
-      i++;
-    }
-  }
-  swap(arr[i], arr[high]);
-  return i;
-}
-
-void quickSort(double arr[], int low, int high) {
-  if (low < high) {
-    int pivotIdx = partition(arr, low, high);
-    quickSort(arr, low, pivotIdx - 1);
-    quickSort(arr, pivotIdx + 1, high);
-  }
-}
-
-int main() {
-  int n;
-  cin >> n;
-
-  double arrival[500], departure[500];
-  for (int i = 0; i < n; i++) {
-    cin >> arrival[i] >> departure[i];
-  }
-
-  // Sort เวลามาถึงและเวลาออกแยกกัน (น้อยไปมาก)
-  quickSort(arrival, 0, n - 1);
-  quickSort(departure, 0, n - 1);
-
-  // Greedy: ใช้ 2 pointer นับจำนวน platform ที่ต้องใช้
+// ฟังก์ชันสำหรับคำนวณหาจำนวนชานชาลาที่น้อยที่สุด (Greedy)
+int findMinPlatforms(double arrival[], double departure[], int n) {
   int platforms = 0, maxPlatforms = 0;
   int i = 0, j = 0;
 
@@ -53,7 +22,26 @@ int main() {
     }
   }
 
-  cout << maxPlatforms << endl;
+  return maxPlatforms;
+}
+
+int main() {
+  int n;
+  cin >> n;
+
+  double arrival[500], departure[500];
+  for (int i = 0; i < n; i++) {
+    cin >> arrival[i] >> departure[i];
+  }
+
+  // ใช้ฟังก์ชัน sort จาก library อัตโนมัติ (เรียงจากน้อยไปมาก)
+  sort(arrival, arrival + n);
+  sort(departure, departure + n);
+
+  // เรียกใช้ฟังก์ชันหาจำนวนชานชาลา และเก็บค่าไว้ในตัวแปร result
+  int result = findMinPlatforms(arrival, departure, n);
+
+  cout << result << endl;
 
   return 0;
 }

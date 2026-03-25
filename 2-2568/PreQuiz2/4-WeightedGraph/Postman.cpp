@@ -6,29 +6,15 @@ using namespace std;
 
 const int INF = 1e9;
 
-int main() {
-  int n, m, s, t;
-  if (!(cin >> n >> m >> s >> t))
-    return 0;
-
-  // roads[u] = list of pairs (v, weight) representing edges
-  vector<vector<pair<int, int>>> adj(n + 1);
-  for (int i = 0; i < m; i++) {
-    int u, v, w;
-    cin >> u >> v >> w;
-    adj[u].push_back({v, w});
-    adj[v].push_back({u, w}); // ถนนสามารถเดินทางสวนกันได้ (Bi-directional)
-  }
-
+// ฟังก์ชัน Dijkstra สำหรับหาระยะทางที่สั้นที่สุดจาก s ไป t
+int dijkstra(const vector<vector<pair<int, int>>>& adj ,int n, int s, int t ) {
   // dist[i] เก็บระยะทางที่สั้นที่สุดจาก s ไปยัง i
   vector<int> dist(n + 1, INF);
 
   // priority_queue สำหรับ Dijkstra: {ระยะทาง, โหนด} แบบ min-heap
-  priority_queue<pair<int, int>, vector<pair<int, int>>,
-                 greater<pair<int, int>>>
-      pq;
+  priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
 
-  // เริ่มต้นที่จุด S
+  // เริ่มต้นที่จุด s
   dist[s] = 0;
   pq.push({0, s});
 
@@ -41,7 +27,7 @@ int main() {
     if (d > dist[u])
       continue;
 
-    // ถ้าถึงจุดหมาย T แล้ว สามารถ break ได้เลยเพราะพบเส้นทางสั้นสุดแล้ว
+    // ถ้าถึงจุดหมาย t แล้ว สามารถ break ได้เลยเพราะพบเส้นทางสั้นสุดแล้ว
     if (u == t)
       break;
 
@@ -58,8 +44,29 @@ int main() {
     }
   }
 
+  // ส่งคืนระยะทางที่สั้นที่สุดไปยังเป้าหมาย t
+  return dist[t];
+}
+
+int main() {
+  int n, m, s, t;
+  if (!(cin >> n >> m >> s >> t))
+    return 0;
+
+  // roads[u] = list of pairs (v, weight) representing edges
+  vector<vector<pair<int, int>>> adj(n + 1);
+  for (int i = 0; i < m; i++) {
+    int u, v, w;
+    cin >> u >> v >> w;
+    adj[u].push_back({v, w});
+    adj[v].push_back({u, w}); // ถนนสามารถเดินทางสวนกันได้ (Bi-directional)
+  }
+
+  // เรียกใช้ฟังก์ชัน Dijkstra และเก็บผลลัพธ์
+  int shortest_distance = dijkstra(adj, n, s, t);
+
   // พิมพ์ระยะทางที่สั้นที่สุดไปยังจุดหมาย T
-  cout << dist[t] << endl;
+  cout << shortest_distance << endl;
 
   return 0;
 }

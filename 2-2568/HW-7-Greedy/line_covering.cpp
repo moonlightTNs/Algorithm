@@ -1,77 +1,57 @@
 #include <iostream>
+#include <vector>
+#include <algorithm>
 using namespace std;
+
+struct Interval {
+    int xi, xj;
+};
 
 int main() {
     int n;
     cin >> n;
-
-    int xi[500], xj[500];
-
-    for (int i = 0; i < n; i++) {
-        cin >> xi[i] >> xj[i];
+    vector<Interval> segs(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> segs[i].xi >> segs[i].xj;
     }
-
     int xa, xb;
     cin >> xa >> xb;
 
-    // เรียงตาม xi จากน้อยไปมาก (Bubble Sort)
-    for (int i = 0; i < n - 1; i++) {
-        for (int j = 0; j < n - i - 1; j++) {
-            if (xi[j] > xi[j + 1] || 
-               (xi[j] == xi[j + 1] && xj[j] > xj[j + 1])) {
-                swap(xi[j], xi[j + 1]);
-                swap(xj[j], xj[j + 1]);
-            }
-        }
-    }
+    // sort by xi, then xj
+    sort(segs.begin(), segs.end(), [](const Interval& a, const Interval& b) {
+        return a.xi < b.xi || (a.xi == b.xi && a.xj < b.xj);
+    });
 
+    vector<Interval> chosen;
     int current = xa;
-    int count = 0;
-
-    int ans_xi[500], ans_xj[500];
-
-    int i = 0;
-
+    int idx = 0;
     while (current < xb) {
         int maxEnd = current;
-        int chosen = -1;
-
-        // หาเส้นที่ xi <= current และ xj มากที่สุด
-        while (i < n && xi[i] <= current) {
-            if (xj[i] > maxEnd) {
-                maxEnd = xj[i];
-                chosen = i;
+        int bestIdx = -1;
+        // Find the segment that starts before or at current and ends farthest
+        while (idx < n && segs[idx].xi <= current) {
+            if (segs[idx].xj > maxEnd) {
+                maxEnd = segs[idx].xj;
+                bestIdx = idx;
             }
-            i++;
+            ++idx;
         }
-
-        if (chosen == -1) {
-            cout << "0\n"; // ไม่สามารถครอบคลุมได้
+        if (bestIdx == -1) {
+            cout << 0 << endl;
             return 0;
         }
-
-        ans_xi[count] = xi[chosen];
-        ans_xj[count] = xj[chosen];
-        count++;
-
+        chosen.push_back(segs[bestIdx]);
         current = maxEnd;
     }
 
-    // เรียงคำตอบตาม xi และ xj จากน้อยไปมาก
-    for (int a = 0; a < count - 1; a++) {
-        for (int b = 0; b < count - a - 1; b++) {
-            if (ans_xi[b] > ans_xi[b + 1] ||
-               (ans_xi[b] == ans_xi[b + 1] && ans_xj[b] > ans_xj[b + 1])) {
-                swap(ans_xi[b], ans_xi[b + 1]);
-                swap(ans_xj[b], ans_xj[b + 1]);
-            }
-        }
-    }
+    // sort answer by xi, then xj
+    sort(chosen.begin(), chosen.end(), [](const Interval& a, const Interval& b) {
+        return a.xi < b.xi || (a.xi == b.xi && a.xj < b.xj);
+    });
 
-    cout << count << endl;
-    for (int k = 0; k < count; k++) {
-        cout << ans_xi[k] << " " << ans_xj[k] << endl;
+    cout << chosen.size() << endl;
+    for (const auto& seg : chosen) {
+        cout << seg.xi << " " << seg.xj << endl;
     }
-
     return 0;
 }

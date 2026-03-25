@@ -1,35 +1,40 @@
 #include <iostream>
+#include <algorithm>
+#include <vector>
 using namespace std;
 
-int partition(double ratio[], double weight[], double value[], int index[],
-              int low, int high) {
-  double pivot = ratio[high];
-  int i = low;
-  for (int j = low; j < high; j++) {
-    if (ratio[j] >= pivot) {
-      swap(ratio[i], ratio[j]);
-      swap(weight[i], weight[j]);
-      swap(value[i], value[j]);
-      swap(index[i], index[j]);
-      i++;
+class Item {
+ public:
+  int idx;
+  double weight;
+  double value;
+  double ratio;
+};
+
+double fractionalKnapsack(const vector<Item> &items, double W,
+                         vector<double> &fraction) {
+  double remaining = W;
+  double totalValue = 0.0;
+
+  for (int i = 0; i < (int)items.size(); i++) {
+    if (remaining <= 0) {
+      break;
+    }
+
+    int idx = items[i].idx;
+    if (items[i].weight <= remaining) {
+      fraction[idx] = 1.0;
+      totalValue += items[i].value;
+      remaining -= items[i].weight;
+    } else {
+      double frac = remaining / items[i].weight;
+      fraction[idx] = frac;
+      totalValue += items[i].value * frac;
+      remaining = 0;
     }
   }
-  swap(ratio[i], ratio[high]);
-  swap(weight[i], weight[high]);
-  swap(value[i], value[high]);
-  swap(index[i], index[high]);
-  return i;
-}
 
-// Quick Sort ตาม ratio จากมากไปน้อย
-void quickSort(double ratio[], double weight[], double value[], int index[],
-               int low, int high) {
-
-  if (low < high) {
-    int pivotIdx = partition(ratio, weight, value, index, low, high);
-    quickSort(ratio, weight, value, index, low, pivotIdx - 1);
-    quickSort(ratio, weight, value, index, pivotIdx + 1, high);
-  }
+  return totalValue;
 }
 
 int main() {
@@ -37,54 +42,35 @@ int main() {
   double W;
   cin >> n >> W;
 
-  double weight[10], value[10], ratio[10], fraction[10];
-  int index[10]; // เก็บ index เดิมไว้
+  vector<Item> items(n);
+  vector<double> fraction(n, 0.0);
 
   // รับ input น้ำหนักและมูลค่า
   for (int i = 0; i < n; i++)
-    cin >> weight[i];
+    cin >> items[i].weight;
   for (int i = 0; i < n; i++)
-    cin >> value[i];
+    cin >> items[i].value;
 
-  // คำนวณ value/weight ratio และเก็บ index เดิม
+  // คำนวณ ratio และเก็บ index เดิม
   for (int i = 0; i < n; i++) {
-    ratio[i] = value[i] / weight[i];
-    index[i] = i;
-    fraction[i] = 0.0; // เริ่มต้น ยังไม่เลือก item ใดเลย
+    items[i].idx = i;
+    items[i].ratio = items[i].value / items[i].weight;
   }
 
-  // Sort ตาม ratio จากมากไปน้อย (Quick Sort)
-  quickSort(ratio, weight, value, index, 0, n - 1);
-
-  // Greedy: เลือก item ที่มี ratio สูงสุดก่อน
-  double remaining = W;
-  double totalValue = 0.0;
-
-  for (int i = 0; i < n; i++) {
-    if (remaining <= 0)
-      break;
-
-    if (weight[i] <= remaining) {
-      // เลือกทั้งชิ้น
-      fraction[index[i]] = 1.0;
-      totalValue += value[i];
-      remaining -= weight[i];
-    } else {
-      // เลือกบางส่วน
-      double frac = remaining / weight[i];
-      fraction[index[i]] = frac;
-      totalValue += value[i] * frac;
-      remaining = 0;
+  sort(items.begin(), items.end(), [](const Item &a, const Item &b) {
+    if (a.ratio == b.ratio) {
+      return a.idx < b.idx;
     }
-  }
+    return a.ratio > b.ratio;
+  });
+
+  double totalValue = fractionalKnapsack(items, W, fraction);
 
   // แสดงสัดส่วนการเลือก item ตามลำดับเดิม (ทศนิยม 2 ตำแหน่ง)
   cout << fixed;
   cout.precision(2);
   for (int i = 0; i < n; i++) {
-    if (i > 0)
-      cout << " ";
-    cout << fraction[i];
+    cout << fraction[i] << " ";
   }
   cout << endl;
 

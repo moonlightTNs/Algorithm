@@ -1,30 +1,8 @@
 #include <cmath>  
+#include <algorithm>
 #include <iostream>
 
 using namespace std;
-
-// Partition สำหรับ Quick Sort (เรียงจากมากไปน้อย)
-int partition(int arr[], int low, int high) {
-  int pivot = arr[high];
-  int i = low;
-  for (int j = low; j < high; j++) {
-    if (arr[j] >= pivot) { // มากไปน้อย
-      swap(arr[i], arr[j]);
-      i++;
-    }
-  }
-  swap(arr[i], arr[high]);
-  return i;
-}
-
-// Quick Sort (เรียก partition)
-void quickSort(int arr[], int low, int high) {
-  if (low < high) {
-    int pivotIdx = partition(arr, low, high);
-    quickSort(arr, low, pivotIdx - 1);
-    quickSort(arr, pivotIdx + 1, high);
-  }
-}
 
 int main() {
   int n;
@@ -38,7 +16,9 @@ int main() {
   }
 
   // Sort ผลต่างจากมากไปน้อย (Greedy: จัดการคู่ที่ต่างกันมากๆ ก่อน)
-  quickSort(diffs, 0, n - 1);
+  sort(diffs, diffs + n, [](int a, int b) {
+    return a > b;
+  });
 
   // Greedy: แบ่งผลต่าง sumA และ sumB ให้เท่ากันที่สุด
   // โดยเอาค่ามากสุดไปใส่ฝั่งที่น้อยกว่าเสมอ

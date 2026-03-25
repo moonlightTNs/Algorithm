@@ -3,7 +3,7 @@
 using namespace std;
 
 int n;
-int chair[15];      
+int chair[15];
 bool used[15];      
 int count_ways = 0;
 
@@ -19,7 +19,7 @@ bool isValid() {
 }
 
 // Backtracking function
-void chair(int pos) {
+void seats(int pos) {
     // ถ้าจัดครบทุกเก้าอี้แล้ว
     if (pos > n) {
         // ตรวจสอบเงื่อนไขว่าเด็กคนที่ 1 และ 2 นั่งติดกัน
@@ -37,7 +37,7 @@ void chair(int pos) {
             used[child] = true;
             
             // ไปจัดเก้าอี้ตัวถัดไป
-            chair(pos + 1);
+            seats(pos + 1);
             
             // ยกเลิกการเลือก (backtrack)
             chair[pos] = 0;
@@ -60,7 +60,7 @@ int main() {
     }
     
     count_ways = 0;
-    chair(1);  // เริ่มจัดเก้าอี้ตัวที่ 1
+    seats(1);  // เริ่มจัดเก้าอี้ตัวที่ 1
     
     cout << count_ways << endl;
     

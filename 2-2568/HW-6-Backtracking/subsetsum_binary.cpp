@@ -2,44 +2,40 @@
 
 using namespace std ; 
 
-
-void printsol(int x[] ,int a[] , int n , int target){
-	int sum = 0 ;
-	for(int i = 1; i <= n ; i++){
-		if(x[i] == 1) sum = sum + a[i]; 
+void binary(int x[] ,int a[] , int idx , int n , int current_sum , int target ){
+	if(current_sum > target){
+		return;
 	}
-	if(sum == target){
-		for(int i = 1 ; i<=n ; i++){
-			 if(x[i] == 1) {
-			 	cout << a[i] << " " ;
-			 } 
-			
+
+	if(idx > n){
+		if(current_sum == target){
+			for(int i = 1 ; i <= n ; i++){
+				if(x[i] == 1) {
+					cout << a[i] << " ";
+				}
+			}
+			cout << endl;
+			cout << "sum : " << current_sum << endl;
 		}
-		cout << endl ;
-		cout << "sum : " << sum ;
+		return;
 	}
-	 
-}
 
-void subset(int x[] ,int a[] , int l , int r , int k ){
-	if(l == r){
-		printsol(x,a,r,k) ; 
-	}
-	else{
-		x[l+1] = 1 ;
-		subset(x,a,l+1,r,k) ;
-		x[l+1] = 0 ;
-		subset(x,a,l+1,r,k) ;
-	}
+	// choose
+	x[idx] = 1;
+	binary(x, a, idx + 1, n, current_sum + a[idx], target);
+
+	// unchoose แล้วไปทางไม่เลือก
+	x[idx] = 0;
+	binary(x, a, idx + 1, n, current_sum, target);
 }
 
 
 int main(){
-	int n = 5 ;
-	int a[] = {0,25,10,9,2,1} ;
-	int x[6] ;
+	int n = 4 ;
+	int a[] = {0,25,10,9,2} ;
+	int x[5] ;
 	int sumk = 12 ;
-	subset(x,a,0,n,sumk) ;
+	binary(x,a,1,n,0,sumk) ;
 	return 0 ;
 
 }

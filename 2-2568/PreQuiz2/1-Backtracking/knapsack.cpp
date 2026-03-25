@@ -1,4 +1,5 @@
 #include <iostream>
+#include <climits>
 using namespace std;
 
 int MaxV = INT_MIN;
@@ -7,33 +8,18 @@ int W[100]; // น้ำหนักสินค้า
 int k;      // น้ำหนักสูงสุดที่ถุงรับได้
 int n;      // จำนวนสินค้า
 
-void knap_print(int x[]) {
-  int sum_w = 0;
-  int sum_v = 0;
-
-  for (int i = 1; i <= n; i++) {
-    if (x[i] == 1) {
-      sum_w += W[i];
-      sum_v += V[i];
-    }
+void subsetbinary(int idx, int sum_w, int sum_v) {
+  if (sum_w > k) {
+    return;
   }
-
-  if (sum_w <= k) {
+  if (idx > n) {
     if (sum_v > MaxV) {
       MaxV = sum_v;
     }
+    return;
   }
-}
-
-void subsetbinary(int x[], int l, int r) {
-  if (l == r) {
-    knap_print(x);
-  } else {
-    x[l + 1] = 1;
-    subsetbinary(x, l + 1, r);
-    x[l + 1] = 0;
-    subsetbinary(x, l + 1, r);
-  }
+  subsetbinary(idx + 1, sum_w + W[idx], sum_v + V[idx]);
+  subsetbinary(idx + 1, sum_w, sum_v);
 }
 
 int main() {
@@ -51,9 +37,7 @@ int main() {
     cin >> W[i];
   }
 
-  int x[n + 1];
-
-  subsetbinary(x, 0, n);
+  subsetbinary(1, 0, 0);
   cout << MaxV << endl;
 
   return 0;

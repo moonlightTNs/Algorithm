@@ -1,26 +1,7 @@
 #include <iostream>
+#include <algorithm> // เพิ่ม Library นี้เพื่อใช้ std::sort
+
 using namespace std;
-
-int partition(double length[], int low, int high) {
-  double pivot = length[high];
-  int i = low;
-  for (int j = low; j < high; j++) {
-    if (length[j] <= pivot) { // น้อยไปมาก
-      swap(length[i], length[j]);
-      i++;
-    }
-  }
-  swap(length[i], length[high]);
-  return i;
-}
-
-void quickSort(double length[], int low, int high) {
-  if (low < high) {
-    int pivotIdx = partition(length, low, high);
-    quickSort(length, low, pivotIdx - 1);
-    quickSort(length, pivotIdx + 1, high);
-  }
-}
 
 int main() {
   int n;
@@ -31,8 +12,8 @@ int main() {
     cin >> length[i];
   }
 
-  // Greedy: Sort ความยาวไฟล์จากน้อยไปมาก (Quick Sort)
-  quickSort(length, 0, n - 1);
+  // Greedy: ใช้ฟังก์ชัน sort จาก library (เรียงความยาวไฟล์จากน้อยไปมาก)
+  sort(length, length + n);
 
   // คำนวณ Mean Retrieval Time
   // เวลาเข้าถึงไฟล์ที่ k = length[0] + length[1] + ... + length[k]
